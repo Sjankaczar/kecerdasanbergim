@@ -1,0 +1,4 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:Button text="2 States" name="ModeButton" style="width: 407px; height: 145px; -unity-text-align: upper-right; position: absolute; top: 559px; left: -4px; font-size: 95px;"/>
+    <ui:Label text="Distance: 0&#10;" name="DistanceLabel" style="width: 570px; position: absolute; top: 388px; left: 0; height: 160px; font-size: 100px;"/>
+</ui:UXML>

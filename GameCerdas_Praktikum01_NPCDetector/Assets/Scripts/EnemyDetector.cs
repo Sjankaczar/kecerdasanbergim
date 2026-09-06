@@ -2,50 +2,32 @@ using UnityEngine;
 
 public class EnemyDetector : MonoBehaviour
 {
-    // 1. Tambahkan state Suspicious di enum
-    public enum EnemyState
-    {
-        Idle,
-        Suspicious,
-        Alert
-    }
+    public enum EnemyState { Idle, Suspicious, Alert }
 
     [Header("Target")]
-    [SerializeField]
-    private Transform player;
+    [SerializeField] private Transform player;
 
     [Header("AI Parameters")]
-    [SerializeField]
-    [Min(0f)]
-    private float alertRadius = 4f; // Radius Alert (< 4 atau <= 4)
-
-    [SerializeField]
-    [Min(0f)]
-    private float suspiciousRadius = 8f; // Radius Suspicious (<= 8)
+    [SerializeField] [Min(0f)] private float alertRadius = 4f;
+    [SerializeField] [Min(0f)] private float suspiciousRadius = 8f;
 
     [Header("Visual Colors")]
-    [SerializeField]
-    private Color idleColor = Color.blue;
-
-    [SerializeField]
-    private Color suspiciousColor = Color.yellow;
-
-    [SerializeField]
-    private Color alertColor = Color.red;
+    [SerializeField] private Color idleColor = Color.blue;
+    [SerializeField] private Color suspiciousColor = Color.yellow;
+    [SerializeField] private Color alertColor = Color.red;
 
     [Header("Debug")]
-    [SerializeField]
-    private EnemyState currentState;
-
-    [SerializeField]
-    private float currentDistance;
+    [SerializeField] private EnemyState currentState;
+    
+    // Variabel ini akan dibaca oleh UI
+    public float currentDistance { get; private set; }
+    public bool isAdvancedMode { get; private set; } = false; // False = Mode 1, True = Mode 2
 
     private Renderer enemyRenderer;
 
     void Start()
     {
         enemyRenderer = GetComponent<Renderer>();
-        currentState = EnemyState.Alert;
         SetState(EnemyState.Idle);
     }
 
@@ -56,63 +38,66 @@ public class EnemyDetector : MonoBehaviour
 
     void DetectPlayer()
     {
-        if (player == null)
-            return;
+        if (player == null) return;
 
-        // Hitung jarak dari Enemy ke Player
         currentDistance = Vector3.Distance(transform.position, player.position);
 
-        // 2. Logika Decision bertingkat
-        if (currentDistance <= alertRadius)
+        if (isAdvancedMode)
         {
-            SetState(EnemyState.Alert);
-        }
-        else if (currentDistance <= suspiciousRadius)
-        {
-            SetState(EnemyState.Suspicious);
+            // Mode 2: Alert, Suspicious, Idle
+            if (currentDistance <= alertRadius) SetState(EnemyState.Alert);
+            else if (currentDistance <= suspiciousRadius) SetState(EnemyState.Suspicious);
+            else SetState(EnemyState.Idle);
         }
         else
         {
-            SetState(EnemyState.Idle);
+            // Mode 1: Alert, Idle
+            if (currentDistance <= alertRadius) SetState(EnemyState.Alert);
+            else SetState(EnemyState.Idle);
         }
     }
 
     void SetState(EnemyState newState)
     {
-        if (currentState == newState)
-            return;
-
+        if (currentState == newState) return;
         currentState = newState;
 
-        Debug.Log("Enemy State → " + currentState);
+        if (enemyRenderer == null) return;
 
-        if (enemyRenderer == null)
-            return;
-
-        // 3. Ubah warna material sesuai state
         switch (currentState)
         {
-            case EnemyState.Alert:
-                enemyRenderer.material.color = alertColor;
-                break;
-            case EnemyState.Suspicious:
-                enemyRenderer.material.color = suspiciousColor;
-                break;
-            case EnemyState.Idle:
-                enemyRenderer.material.color = idleColor;
-                break;
+            case EnemyState.Alert: enemyRenderer.material.color = alertColor; break;
+            case EnemyState.Suspicious: enemyRenderer.material.color = suspiciousColor; break;
+            case EnemyState.Idle: enemyRenderer.material.color = idleColor; break;
         }
     }
 
-    // 4. Menggambar 2 lingkaran Gizmos dengan warna berbeda
+    // Fungsi ini akan dipanggil oleh tombol UI
+    public void ToggleMode()
+    {
+        isAdvancedMode = !isAdvancedMode;
+        
+        // Paksa perbarui state saat mode diganti agar warnanya langsung menyesuaikan
+        currentState = EnemyState.Idle; // Reset sementara
+        DetectPlayer(); 
+    }
+
     void OnDrawGizmos()
     {
-        // Lingkaran Dalam (Alert Radius) - Warna Merah
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, alertRadius);
+        if (isAdvancedMode)
+        {
+            // 3 States: Radius dalam (merah) dan radius luar (kuning)
+            Gizmos.color = Color.red;
+            Gizmos.DrawWireSphere(transform.position, alertRadius);
 
-        // Lingkaran Luar (Suspicious Radius) - Warna Kuning
-        Gizmos.color = Color.yellow;
-        Gizmos.DrawWireSphere(transform.position, suspiciousRadius);
+            Gizmos.color = Color.yellow;
+            Gizmos.DrawWireSphere(transform.position, suspiciousRadius);
+        }
+        else
+        {
+            // 2 States: Hanya satu radius, diubah warnanya menjadi kuning
+            Gizmos.color = Color.yellow;
+            Gizmos.DrawWireSphere(transform.position, alertRadius);
+        }
     }
 }
