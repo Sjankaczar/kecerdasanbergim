@@ -1,0 +1,55 @@
+# Unity Files & Folders to Ignore
+
+# Build folders and binaries
+[Bb]uild/
+[Bb]uilds/
+[Aa]sset[Bb]undles/
+[Aa]utobuild/
+[Pp]rofit/
+
+# Unity generated project files & cache
+[Ll]ibrary/
+[Ll]ogs/
+[Mm]emoryCaptures/
+[Oo]bj/
+[Pp]ackage[Rr]esord/
+packages-lock.json
+[Ss]treamingAssets/aa/
+[Tt]emp/
+[Uu]ser[Ss]ettings/
+
+# Visual Studio / VS Code / IDE temporary files
+.vs/
+.vscode/
+.idea/
+*.csproj
+*.unityproj
+*.sln
+*.slnx
+*.suo
+*.user
+*.userprefs
+*.pidb
+*.booproj
+*.svd
+*.pdb
+*.opendb
+*.VC.db
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Crash reports
+sysinfo.txt
+
+# Unity Addressables
+[Aa]ssets/[Aa]ddressable[Aa]ssets[Dd]ata/*/*.bin*
+
+# Asset store packages (ignore uploaded unitypackages)
+*.unitypackage
