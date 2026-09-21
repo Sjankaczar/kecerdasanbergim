@@ -1,0 +1,40 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/GameMenuStyles.uss?fileID=7433441132597879392&amp;guid=1aadf806943c619489b5f1bc9690be39&amp;type=3#GameMenuStyles"/>
+    <ui:Button text="Pengembangan &#10;Lanjutan" name="btn-pengembangan" style="width: 244px; position: absolute; top: 511px; left: 39px; height: 120px; font-size: 31px; -unity-font-style: bold;"/>
+    <ui:VisualElement name="panel-submenu" style="flex-grow: 1; position: absolute; height: 764px; width: 288px; left: 282px; top: 114px; display: none;">
+        <ui:Button text="lvl 4: Pursue" name="btn-pursue" style="position: absolute; top: 630px; left: 40px; height: 100px; width: 200px; font-size: 32px; -unity-font-style: bold;"/>
+        <ui:Button text="lvl 1: Warna" name="btn-color" style="position: absolute; top: 180px; left: 40px; height: 100px; width: 200px; right: auto; bottom: auto; font-size: 34px; -unity-font-style: bold;"/>
+        <ui:Button text="lvl 2: Animal" name="btn-animal" style="position: absolute; top: 330px; left: 40px; height: 100px; width: 200px; font-size: 32px; -unity-font-style: bold;"/>
+        <ui:Button text="lvl 3: Separation" name="btn-separation" style="position: absolute; top: 480px; left: 40px; height: 100px; width: 200px; font-size: 25px; -unity-font-style: bold;"/>
+    </ui:VisualElement>
+    <ui:Button text="Eksperimen" name="btn-eksperimen" style="width: 244px; position: absolute; top: 708px; left: 39px; height: 120px; font-size: 38px; -unity-font-style: bold;"/>
+    <ui:VisualElement name="panel-eksperimen-submenu" style="flex-grow: 1; position: absolute; height: 905px; width: 2288px; left: 295px; top: 315px; display: none; background-color: rgba(0, 0, 0, 0);">
+        <ui:VisualElement name="panel-parameter" style="flex-grow: 1; position: absolute; height: 311px; width: 698px; top: 279px; left: 1498px; background-color: rgb(0, 102, 149); display: none;">
+            <ui:Button text="-" name="btn-dec-1" style="position: absolute; height: 64px; width: 64px; top: 67px; left: 29px; font-size: 183px; -unity-text-align: middle-center;"/>
+            <ui:Button text="-" name="btn-dec-2" style="position: absolute; height: 64px; width: 64px; top: 182px; left: 30px; font-size: 183px; -unity-text-align: middle-center;"/>
+            <ui:Button text="+" name="btn-inc-1" style="position: absolute; height: 64px; width: 64px; top: 70px; left: 597px; font-size: 114px; -unity-text-align: middle-center;"/>
+            <ui:Button text="+" name="btn-inc-2" style="position: absolute; height: 64px; width: 64px; top: 184px; left: 599px; font-size: 114px; -unity-text-align: middle-center;"/>
+        </ui:VisualElement>
+        <ui:Button text="Eksperimen 4" name="btn-exp4" style="position: absolute; top: 525px; left: 40px; height: 100px; width: 200px; font-size: 29px; -unity-font-style: bold;"/>
+        <ui:Button text="Eksperimen 1" name="btn-exp1" style="position: absolute; top: 150px; left: 40px; height: 100px; width: 200px; right: auto; bottom: auto; font-size: 29px; -unity-font-style: bold;"/>
+        <ui:Button text="Eksperimen 2" name="btn-exp2" style="position: absolute; top: 275px; left: 40px; height: 100px; width: 200px; font-size: 29px; -unity-font-style: bold;"/>
+        <ui:Button text="Eksperimen 3" name="btn-exp3" style="position: absolute; top: 400px; left: 40px; height: 100px; width: 200px; font-size: 29px; -unity-font-style: bold;"/>
+        <ui:Button text="Eksperimen 5" name="btn-exp5" style="position: absolute; top: 650px; left: 40px; height: 100px; width: 200px; font-size: 29px; -unity-font-style: bold;"/>
+        <ui:VisualElement name="panel-exp2" style="flex-grow: 1; position: absolute; height: 200px; width: 477px; top: 336px; left: 1618px; display: none;">
+            <ui:Label text="Slow Radius: 5" name="lbl-slow-radius" style="position: absolute; top: 10px; left: 44px; height: 90px; width: 417px; font-size: 51px;"/>
+            <ui:Label text="Stop Radius: 5" name="lbl-stop-radius" style="position: absolute; top: 118px; left: 46px; height: 90px; width: 417px; font-size: 51px;"/>
+        </ui:VisualElement>
+        <ui:VisualElement name="panel-exp3" style="flex-grow: 1; position: absolute; height: 187px; width: 500px; top: 341px; left: 1595px; display: none;">
+            <ui:Label text="Sensor Distance: 5" name="lbl-sensor-distance" style="position: absolute; top: 4px; left: 18px; height: 90px; width: 417px; font-size: 51px;"/>
+            <ui:Label text="Sensor Radius: 5" name="lbl-sensor-radius" style="position: absolute; top: 111px; left: 15px; height: 90px; width: 417px; font-size: 51px;"/>
+        </ui:VisualElement>
+        <ui:VisualElement name="panel-exp1" style="flex-grow: 1; position: absolute; height: 185px; width: 510px; top: 357px; left: 1603px; display: none;">
+            <ui:Label text="Max Speed: 5" name="lbl-max-speed" style="position: absolute; top: -16px; left: 0; height: 90px; width: 417px; font-size: 51px;"/>
+            <ui:Label text="Max Acceleration: 5" name="lbl-max-acceleration" style="position: absolute; top: 101px; left: 0; height: 90px; width: 417px; font-size: 51px;"/>
+        </ui:VisualElement>
+        <ui:VisualElement name="panel-exp4" style="flex-grow: 1; position: absolute; height: 186px; width: 533px; top: 346px; left: 1579px; display: none;">
+            <ui:Label text="Avoidance Weight: 5" name="lbl-avoidance-weight" style="position: absolute; top: -1px; left: 18px; height: 90px; width: 417px; font-size: 51px;"/>
+            <ui:Label text="Forward Bias: 5" name="lbl-forward-bias" style="position: absolute; top: 110px; left: 24px; height: 90px; width: 417px; font-size: 51px;"/>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

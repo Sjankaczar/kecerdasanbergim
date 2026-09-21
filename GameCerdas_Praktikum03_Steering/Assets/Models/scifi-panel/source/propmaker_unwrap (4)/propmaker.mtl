@@ -1,0 +1,12 @@
+# VoxelCore non-overlap unwrap
+newmtl propmaker
+Kd 1.000 1.000 1.000
+Ks 0.200 0.200 0.200
+Ns 120
+d 1.0
+illum 2
+map_Kd voxel_diffuse.png
+map_Bump voxel_normal.png
+map_Pm voxel_metalness.png
+map_Pr voxel_roughness.png
+# Shadow (multiply over diffuse): voxel_shadow.png

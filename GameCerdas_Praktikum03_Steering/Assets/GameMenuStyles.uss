@@ -1,0 +1,10 @@
+:root {
+}
+
+Button {
+    background-color: rgb(236, 101, 56);
+}
+
+.btn-active {
+    background-color: rgb(161, 67, 36);
+}

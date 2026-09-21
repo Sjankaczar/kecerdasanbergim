@@ -53,3 +53,17 @@ sysinfo.txt
 
 # Asset store packages (ignore uploaded unitypackages)
 *.unitypackage
+
+# ===== Generated / tidak perlu di-commit =====
+
+# Schema yang di-generate ulang oleh Unity Editor
+UIElementsSchema/
+
+# TextMesh Pro Essential Resources (di-import ulang per mesin)
+GameCerdas_Praktikum03_Steering/Assets/TextMesh Pro/
+
+# Folder tooling Command Code
+.commandcode/
+
+# Arsip sumber asset yang isinya sudah diekstrak
+*.zip
