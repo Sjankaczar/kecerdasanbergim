@@ -1,0 +1,9 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <Style src="project://database/Assets/Scripts/HUD.uss?fileID=7433441132597879392&amp;guid=d4848d88e3936ea4f96f31ffe5409485&amp;type=3#HUD" />
+    <ui:VisualElement name="hud-root" class="hud-root">
+        <ui:Label name="enemy-hp" text="Enemy HP: -" class="hud-label" />
+        <ui:Label name="enemy-state" text="Enemy State: -" class="hud-label" />
+        <ui:Label name="distance" text="Distance: -" class="hud-label" />
+        <ui:Label name="player-hp" text="Player HP: -" class="hud-label" />
+    </ui:VisualElement>
+</ui:UXML>

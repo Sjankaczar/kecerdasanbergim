@@ -6,9 +6,12 @@ public class EnemyFSM : MonoBehaviour
     public enum EnemyState
     {
         Patrol,
+        Alert,
         Chase,
         Attack,
+        Search,
         Flee,
+        Heal,
         Dead
     }
 
@@ -23,9 +26,17 @@ public class EnemyFSM : MonoBehaviour
     [SerializeField] private float patrolSpeed = 2f;
     [SerializeField] private float waypointTolerance = 0.5f;
 
+    [Header("Alert")]
+    [SerializeField] private float alertRange = 14f;
+
     [Header("Chase")]
     [SerializeField] private float chaseSpeed = 4f;
     [SerializeField] private float lostPlayerDelay = 2f;
+
+    [Header("Search")]
+    [SerializeField] private float searchDuration = 4f;
+    [SerializeField] private float searchTolerance = 0.8f;
+    [SerializeField] private float searchLookSpeed = 120f;
 
     [Header("Attack")]
     [SerializeField] private float attackRange = 2f;
@@ -39,6 +50,9 @@ public class EnemyFSM : MonoBehaviour
     [SerializeField] private float lowHealthThreshold = 30f;
     [SerializeField] private float safeDistance = 12f;
 
+    [Header("Heal")]
+    [SerializeField] private float healRate = 10f;
+
     [Header("Debug")]
     [SerializeField] private EnemyState currentState;
 
@@ -48,6 +62,11 @@ public class EnemyFSM : MonoBehaviour
     private float nextAttackTime = 0f;
 
     private bool fleeTriggered = false;
+
+    private Vector3 lastKnownPosition;
+    private bool hasLastKnownPosition;
+    private float searchTimer;
+    private bool wasPlayerInAlertCone;
 
     private PlayerHealth playerHealth;
 
@@ -76,6 +95,25 @@ public class EnemyFSM : MonoBehaviour
     private void Update()
     {
         // ================================
+        // MEMORY
+        // ================================
+
+        UpdateMemory();
+
+        // ================================
+        // ALERT PROXIMITY
+        // ================================
+
+        bool playerInAlertCone =
+            perception.IsInViewCone(player, alertRange);
+
+        bool playerEnteredAlertCone =
+            playerInAlertCone &&
+            !wasPlayerInAlertCone;
+
+        wasPlayerInAlertCone = playerInAlertCone;
+
+        // ================================
         // GLOBAL TRANSITION PRIORITY
         // ================================
 
@@ -100,7 +138,11 @@ public class EnemyFSM : MonoBehaviour
         switch (currentState)
         {
             case EnemyState.Patrol:
-                UpdatePatrol();
+                UpdatePatrol(playerEnteredAlertCone);
+                break;
+
+            case EnemyState.Alert:
+                UpdateAlert();
                 break;
 
             case EnemyState.Chase:
@@ -111,13 +153,40 @@ public class EnemyFSM : MonoBehaviour
                 UpdateAttack();
                 break;
 
+            case EnemyState.Search:
+                UpdateSearch();
+                break;
+
             case EnemyState.Flee:
                 UpdateFlee();
+                break;
+
+            case EnemyState.Heal:
+                UpdateHeal();
                 break;
 
             case EnemyState.Dead:
                 UpdateDead();
                 break;
+        }
+    }
+
+    // =====================================
+    // MEMORY
+    // =====================================
+
+    private void UpdateMemory()
+    {
+        if (perception == null ||
+            player == null)
+            return;
+
+        if (perception.CanSeePlayer)
+        {
+            lastKnownPosition =
+                player.position;
+
+            hasLastKnownPosition = true;
         }
     }
 
@@ -160,6 +229,17 @@ public class EnemyFSM : MonoBehaviour
 
                 break;
 
+            case EnemyState.Alert:
+
+                agent.isStopped = false;
+                agent.speed = patrolSpeed;
+
+                agent.SetDestination(
+                    player.position
+                );
+
+                break;
+
             case EnemyState.Chase:
 
                 agent.isStopped = false;
@@ -176,6 +256,22 @@ public class EnemyFSM : MonoBehaviour
 
                 break;
 
+            case EnemyState.Search:
+
+                agent.isStopped = false;
+                agent.speed = patrolSpeed;
+
+                searchTimer = searchDuration;
+
+                if (hasLastKnownPosition)
+                {
+                    agent.SetDestination(
+                        lastKnownPosition
+                    );
+                }
+
+                break;
+
             case EnemyState.Flee:
 
                 agent.isStopped = false;
@@ -187,6 +283,13 @@ public class EnemyFSM : MonoBehaviour
                         safePoint.position
                     );
                 }
+
+                break;
+
+            case EnemyState.Heal:
+
+                agent.isStopped = true;
+                agent.ResetPath();
 
                 break;
 
@@ -217,11 +320,18 @@ public class EnemyFSM : MonoBehaviour
     // PATROL
     // =====================================
 
-    private void UpdatePatrol()
+    private void UpdatePatrol(
+        bool playerEnteredAlertCone)
     {
         if (perception.CanSeePlayer)
         {
             ChangeState(EnemyState.Chase);
+            return;
+        }
+
+        if (playerEnteredAlertCone)
+        {
+            ChangeState(EnemyState.Alert);
             return;
         }
 
@@ -263,6 +373,31 @@ public class EnemyFSM : MonoBehaviour
     }
 
     // =====================================
+    // ALERT
+    // =====================================
+
+    private void UpdateAlert()
+    {
+        if (perception.CanSeePlayer)
+        {
+            ChangeState(EnemyState.Chase);
+            return;
+        }
+
+        if (!perception.IsInViewCone(
+            player,
+            alertRange))
+        {
+            ChangeState(EnemyState.Patrol);
+            return;
+        }
+
+        agent.SetDestination(
+            player.position
+        );
+    }
+
+    // =====================================
     // CHASE
     // =====================================
 
@@ -300,10 +435,52 @@ public class EnemyFSM : MonoBehaviour
                 lostPlayerDelay)
             {
                 ChangeState(
-                    EnemyState.Patrol
+                    EnemyState.Search
                 );
 
                 return;
+            }
+        }
+    }
+
+    // =====================================
+    // SEARCH
+    // =====================================
+
+    private void UpdateSearch()
+    {
+        if (perception.CanSeePlayer)
+        {
+            ChangeState(EnemyState.Chase);
+            return;
+        }
+
+        if (!hasLastKnownPosition)
+        {
+            ChangeState(EnemyState.Patrol);
+            return;
+        }
+
+        if (!agent.pathPending &&
+            agent.remainingDistance <=
+            searchTolerance)
+        {
+            agent.isStopped = true;
+
+            transform.Rotate(
+                0f,
+                searchLookSpeed *
+                Time.deltaTime,
+                0f
+            );
+
+            searchTimer -= Time.deltaTime;
+
+            if (searchTimer <= 0f)
+            {
+                hasLastKnownPosition = false;
+
+                ChangeState(EnemyState.Patrol);
             }
         }
     }
@@ -393,20 +570,47 @@ public class EnemyFSM : MonoBehaviour
                 player.position
             );
 
-        float safePointDistance =
-            Vector3.Distance(
-                transform.position,
-                safePoint.position
-            );
+        Vector3 safePointOffset =
+            safePoint.position -
+            transform.position;
 
-        if (playerDistance >= safeDistance ||
-            safePointDistance <= 1f)
+        safePointOffset.y = 0f;
+
+        float safePointDistance =
+            safePointOffset.magnitude;
+
+        if (safePointDistance <= 1f)
+        {
+            ChangeState(EnemyState.Heal);
+            return;
+        }
+
+        if (playerDistance >= safeDistance)
         {
             ChangeState(
                 EnemyState.Patrol
             );
 
             return;
+        }
+    }
+
+    // =====================================
+    // HEAL
+    // =====================================
+
+    private void UpdateHeal()
+    {
+        health.Heal(
+            healRate *
+            Time.deltaTime
+        );
+
+        if (health.IsFull)
+        {
+            fleeTriggered = false;
+
+            ChangeState(EnemyState.Patrol);
         }
     }
 
@@ -438,6 +642,57 @@ public class EnemyFSM : MonoBehaviour
             transform.position,
             attackExitRange
         );
+
+        Gizmos.color = new Color(1f, 0.5f, 0f);
+
+        Gizmos.DrawWireSphere(
+            transform.position,
+            alertRange
+        );
+
+        if (perception != null)
+        {
+            float halfAlertAngle =
+                perception.VisionAngle * 0.5f;
+
+            Vector3 alertLeftDirection =
+                Quaternion.Euler(
+                    0f,
+                    -halfAlertAngle,
+                    0f
+                ) * transform.forward;
+
+            Vector3 alertRightDirection =
+                Quaternion.Euler(
+                    0f,
+                    halfAlertAngle,
+                    0f
+                ) * transform.forward;
+
+            Gizmos.DrawRay(
+                transform.position,
+                alertLeftDirection * alertRange
+            );
+
+            Gizmos.DrawRay(
+                transform.position,
+                alertRightDirection * alertRange
+            );
+        }
+
+        if (hasLastKnownPosition)
+        {
+            Gizmos.color = Color.blue;
+
+            Gizmos.DrawSphere(
+                lastKnownPosition,
+                0.3f
+            );
+
+            Gizmos.DrawLine(
+                transform.position,
+                lastKnownPosition
+            );
+        }
     }
 }
-

@@ -11,6 +11,9 @@ public class EnemyHealth : MonoBehaviour
     public bool IsDead =>
         CurrentHealth <= 0f;
 
+    public bool IsFull =>
+        CurrentHealth >= maxHealth;
+
     private void Awake()
     {
         CurrentHealth = maxHealth;
@@ -22,6 +25,24 @@ public class EnemyHealth : MonoBehaviour
             return;
 
         CurrentHealth -= damage;
+
+        CurrentHealth = Mathf.Clamp(
+            CurrentHealth,
+            0f,
+            maxHealth
+        );
+
+        Debug.Log(
+            "Enemy HP: " + CurrentHealth
+        );
+    }
+
+    public void Heal(float amount)
+    {
+        if (IsDead)
+            return;
+
+        CurrentHealth += amount;
 
         CurrentHealth = Mathf.Clamp(
             CurrentHealth,

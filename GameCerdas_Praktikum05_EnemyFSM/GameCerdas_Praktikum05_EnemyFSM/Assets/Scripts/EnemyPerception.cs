@@ -17,6 +17,8 @@ public class EnemyPerception : MonoBehaviour
 
     public bool CanSeePlayer { get; private set; }
 
+    public float VisionAngle => visionAngle;
+
     public float DistanceToPlayer
     {
         get
@@ -31,34 +33,29 @@ public class EnemyPerception : MonoBehaviour
         }
     }
 
-    private void Update()
+    public bool IsInViewCone(
+        Transform target,
+        float range)
     {
-        CanSeePlayer = CheckPlayerVisibility();
-    }
-
-    private bool CheckPlayerVisibility()
-    {
-        if (player == null)
+        if (target == null)
             return false;
 
         Vector3 origin =
             transform.position +
             Vector3.up * eyeHeight;
 
-        Vector3 target =
-            player.position +
+        Vector3 targetPosition =
+            target.position +
             Vector3.up * 0.8f;
 
         Vector3 direction =
-            target - origin;
+            targetPosition - origin;
 
         float distance = direction.magnitude;
 
-        // 1. Periksa jarak
-        if (distance > visionRange)
+        if (distance > range)
             return false;
 
-        // 2. Periksa sudut pandang
         float angle = Vector3.Angle(
             transform.forward,
             direction
@@ -67,7 +64,6 @@ public class EnemyPerception : MonoBehaviour
         if (angle > visionAngle * 0.5f)
             return false;
 
-        // 3. Periksa obstacle
         bool blocked = Physics.Raycast(
             origin,
             direction.normalized,
@@ -75,10 +71,20 @@ public class EnemyPerception : MonoBehaviour
             obstacleMask
         );
 
-        if (blocked)
-            return false;
+        return !blocked;
+    }
 
-        return true;
+    private void Update()
+    {
+        CanSeePlayer = CheckPlayerVisibility();
+    }
+
+    private bool CheckPlayerVisibility()
+    {
+        return IsInViewCone(
+            player,
+            visionRange
+        );
     }
 
     private void OnDrawGizmosSelected()
@@ -115,4 +121,3 @@ public class EnemyPerception : MonoBehaviour
         );
     }
 }
-

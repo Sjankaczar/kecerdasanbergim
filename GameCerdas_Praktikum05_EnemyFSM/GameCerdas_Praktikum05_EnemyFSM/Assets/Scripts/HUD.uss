@@ -1,0 +1,16 @@
+.hud-root {
+    position: absolute;
+    top: 16px;
+    left: 16px;
+    padding: 18px 24px;
+    background-color: rgba(0, 0, 0, 0.6);
+    border-radius: 10px;
+    picking-mode: ignore;
+}
+
+.hud-label {
+    color: white;
+    font-size: 32px;
+    margin-bottom: 4px;
+    -unity-text-align: middle-left;
+}
