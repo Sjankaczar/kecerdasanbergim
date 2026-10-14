@@ -26,6 +26,11 @@ public class PlayerFirstPersonController : MonoBehaviour
     [Tooltip("Percepatan gravitasi. Harus nilai negatif.")]
     [SerializeField] private float gravity = -19.62f;
 
+    [Header("Top-Down Controls")]
+    [SerializeField] private bool worldSpaceMovement = false;
+    [SerializeField] private bool cameraRelativeMovement = true;
+    [SerializeField, Min(1f)] private float turnSpeed = 720f;
+
     [Header("Mouse Look")]
     [Tooltip("Transform yang menerima rotasi pitch (sumbu X). Biasanya kamera anak Player.")]
     [SerializeField] private Transform cameraPivot = null;
@@ -199,9 +204,33 @@ public class PlayerFirstPersonController : MonoBehaviour
         Vector2 move = moveAction != null ? moveAction.ReadValue<Vector2>() : Vector2.zero;
         IsSprinting = sprintAction != null && sprintAction.IsPressed() && move.sqrMagnitude > 0.001f;
 
-        Vector3 wishDirection = transform.forward * move.y + transform.right * move.x;
+        Camera movementCamera = playerCamera != null ? playerCamera : Camera.main;
+        Vector3 wishDirection;
+        if (worldSpaceMovement)
+        {
+            wishDirection = new Vector3(move.x, 0f, move.y);
+        }
+        else if (cameraRelativeMovement && movementCamera != null)
+        {
+            Vector3 cameraForward = Vector3.ProjectOnPlane(movementCamera.transform.forward, Vector3.up).normalized;
+            Vector3 cameraRight = Vector3.Cross(Vector3.up, cameraForward).normalized;
+            wishDirection = cameraRight * move.x + cameraForward * move.y;
+        }
+        else
+        {
+            wishDirection = transform.forward * move.y + transform.right * move.x;
+        }
         if (wishDirection.sqrMagnitude > 1f)
             wishDirection.Normalize();
+
+        if ((worldSpaceMovement || cameraRelativeMovement) && wishDirection.sqrMagnitude > 0.001f)
+        {
+            Quaternion targetRotation = Quaternion.LookRotation(wishDirection, Vector3.up);
+            transform.rotation = Quaternion.RotateTowards(
+                transform.rotation,
+                targetRotation,
+                turnSpeed * Time.deltaTime);
+        }
 
         float targetSpeed = IsSprinting ? sprintSpeed : walkSpeed;
         Vector3 targetVelocity = wishDirection * targetSpeed;
