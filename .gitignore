@@ -67,3 +67,7 @@ GameCerdas_Praktikum03_Steering/Assets/TextMesh Pro/
 
 # Arsip sumber asset yang isinya sudah diekstrak
 *.zip
+
+# Aset Barking Dog disimpan lokal, tidak di-commit
+/GameCerdas_TugasUTS_StealthInfiltration/Assets/Barking_Dog/
+/GameCerdas_TugasUTS_StealthInfiltration/Assets/Barking_Dog.meta
