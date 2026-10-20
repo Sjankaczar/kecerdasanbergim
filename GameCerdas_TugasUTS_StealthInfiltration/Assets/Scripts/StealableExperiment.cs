@@ -12,6 +12,11 @@ public class StealableExperiment : MonoBehaviour
 
     private bool isStolen = false;
 
+    public bool IsStolen
+    {
+    get { return isStolen; }
+    }
+
     void Update()
     {
         Debug.Log("Script berjalan");
@@ -64,4 +69,5 @@ public class StealableExperiment : MonoBehaviour
         if (interactionText != null)
             interactionText.text = "Potion berhasil diambil!";
     }
+    
 }
