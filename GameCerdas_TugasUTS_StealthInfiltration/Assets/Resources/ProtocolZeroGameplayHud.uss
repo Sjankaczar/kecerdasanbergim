@@ -1,0 +1,18 @@
+.gameplay-hud-root { flex-grow: 1; }
+.hud-objective-card { position: absolute; left: 32px; top: 28px; width: 490px; min-height: 176px; padding: 22px 24px 18px 28px; background-color: rgba(5, 16, 27, 0.86); border-left-width: 1px; border-right-width: 1px; border-top-width: 1px; border-bottom-width: 1px; border-left-color: rgba(80, 205, 235, 0.65); border-right-color: rgba(80, 205, 235, 0.65); border-top-color: rgba(80, 205, 235, 0.65); border-bottom-color: rgba(80, 205, 235, 0.65); }
+.hud-objective-accent { position: absolute; left: 0; top: 0; bottom: 0; width: 4px; background-color: #00d9ff; }
+.hud-eyebrow { color: #00d9ff; font-size: 15px; -unity-font-style: bold; letter-spacing: 3px; margin-bottom: 17px; }
+.hud-objective-number { position: absolute; right: 22px; top: 20px; color: #98a9bc; font-size: 14px; -unity-text-align: upper-right; }
+.hud-objective-title { color: #f0f6ff; font-size: 23px; -unity-font-style: bold; margin-bottom: 9px; transition-property: opacity; transition-duration: 180ms; }
+.hud-objective-title.hud-objective-pulse { opacity: 0.72; }
+.hud-objective-description { color: #b5c4d4; font-size: 15px; white-space: normal; }
+.hud-threat-card { position: absolute; right: 32px; top: 28px; width: 270px; height: 76px; padding-top: 12px; padding-bottom: 8px; padding-left: 16px; align-items: center; background-color: rgba(5, 16, 27, 0.86); border-left-width: 1px; border-right-width: 1px; border-top-width: 1px; border-bottom-width: 1px; border-left-color: rgba(80, 205, 235, 0.65); border-right-color: rgba(80, 205, 235, 0.65); border-top-color: rgba(80, 205, 235, 0.65); border-bottom-color: rgba(80, 205, 235, 0.65); }
+.hud-threat-accent { position: absolute; left: 0; top: 0; bottom: 0; width: 4px; background-color: #45e0a1; }
+.hud-threat-label { color: #98a9bc; font-size: 12px; letter-spacing: 2px; margin-bottom: 4px; }
+.hud-threat-status { color: #45e0a1; font-size: 19px; -unity-font-style: bold; letter-spacing: 2px; }
+.hud-interaction-prompt { position: absolute; left: 25%; right: 25%; bottom: 112px; flex-direction: row; align-items: center; justify-content: center; padding: 12px 24px; background-color: rgba(4, 21, 31, 0.9); border-left-width: 1px; border-right-width: 1px; border-top-width: 1px; border-bottom-width: 1px; border-left-color: rgba(0, 217, 255, 0.8); border-right-color: rgba(0, 217, 255, 0.8); border-top-color: rgba(0, 217, 255, 0.8); border-bottom-color: rgba(0, 217, 255, 0.8); }
+.hud-interaction-key { min-width: 34px; height: 34px; margin-right: 14px; padding-top: 4px; color: #03111a; background-color: #54eaff; font-size: 20px; -unity-font-style: bold; -unity-text-align: middle-center; }
+.hud-interaction-copy { color: #e8f8ff; font-size: 17px; -unity-font-style: bold; letter-spacing: 3px; -unity-text-align: middle-center; }
+.hud-controls-hint { position: absolute; left: 0; right: 0; bottom: 22px; color: rgba(185, 204, 219, 0.82); font-size: 13px; letter-spacing: 2px; -unity-text-align: middle-center; }
+.hud-notification { position: absolute; top: 28px; left: 30%; right: 30%; min-height: 48px; align-items: center; padding: 12px 24px; background-color: rgba(4, 20, 31, 0.94); border-left-width: 1px; border-right-width: 1px; border-top-width: 1px; border-bottom-width: 1px; border-left-color: rgba(0, 217, 255, 0.7); border-right-color: rgba(0, 217, 255, 0.7); border-top-color: rgba(0, 217, 255, 0.7); border-bottom-color: rgba(0, 217, 255, 0.7); }
+.hud-notification-copy { color: #57e9ff; font-size: 16px; -unity-font-style: bold; letter-spacing: 2px; -unity-text-align: middle-center; white-space: normal; }

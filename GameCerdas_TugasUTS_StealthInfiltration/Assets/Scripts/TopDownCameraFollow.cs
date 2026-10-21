@@ -19,6 +19,8 @@ public class TopDownCameraFollow : MonoBehaviour
 
     private void Update()
     {
+        if (GameManager.Instance != null && GameManager.Instance.CurrentGameState != GameState.Playing)
+            return;
         // Orbit mengelilingi sumbu vertikal yang melewati player.
         // Gerakan mouse vertikal diabaikan sehingga pitch dan jarak tidak berubah.
         Mouse mouse = Mouse.current;

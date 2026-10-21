@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.AI;
 using System.Collections.Generic;
+using System;
 
 public class EnemyFSM : MonoBehaviour
 {
@@ -82,6 +83,7 @@ public class EnemyFSM : MonoBehaviour
     private bool reachedLookAroundTarget;
     private AudioSource footstepsSource;
     private Renderer[] childRenderers;
+    private bool stoppedForTerminalState;
 
     private static readonly HashSet<EnemyFSM> AlertingEnemies = new HashSet<EnemyFSM>();
     private static AudioSource sharedAlarmSource;
@@ -104,6 +106,7 @@ public class EnemyFSM : MonoBehaviour
     }
 
     public EnemyState CurrentState => currentState;
+    public event Action<EnemyFSM, EnemyState> StateChanged;
 
     private void Awake()
     {
@@ -126,7 +129,11 @@ public class EnemyFSM : MonoBehaviour
             footstepsSource.loop = true;
             footstepsSource.volume = footstepsVolume;
             footstepsSource.spatialBlend = 1f;
+            AudioPreferences.RegisterSfx(footstepsSource);
         }
+        AudioPreferences.RegisterSfx(sharedAlarmSource);
+        AudioPreferences.RegisterMusic(sharedMusicSource);
+        AudioPreferences.RegisterMusic(sharedBackgroundMusicSource);
     }
 
     private void Start()
@@ -138,6 +145,20 @@ public class EnemyFSM : MonoBehaviour
 
     private void Update()
     {
+        if (GameManager.Instance != null && GameManager.Instance.CurrentGameState != GameState.Playing)
+        {
+            if (GameManager.Instance.CurrentGameState == GameState.Paused)
+                return;
+            if (!stoppedForTerminalState)
+            {
+                if (agent != null && agent.isOnNavMesh) { agent.isStopped = true; agent.ResetPath(); }
+                if (AlertingEnemies.Contains(this)) UnregisterAlertingEnemy();
+                if (footstepsSource != null && footstepsSource.isPlaying) footstepsSource.Stop();
+                StopSharedAudio();
+                stoppedForTerminalState = true;
+            }
+            return;
+        }
         // ================================
         // MEMORY
         // ================================
@@ -270,6 +291,7 @@ public class EnemyFSM : MonoBehaviour
         ExitState(currentState);
 
         currentState = newState;
+        StateChanged?.Invoke(this, currentState);
 
         Debug.Log(
             gameObject.name +
@@ -286,6 +308,19 @@ public class EnemyFSM : MonoBehaviour
     private static bool IsAlertAudioState(EnemyState state)
     {
         return state == EnemyState.Chase || state == EnemyState.Search;
+    }
+
+    private static void StopSharedAudio()
+    {
+        if (sharedAlarmSource != null) sharedAlarmSource.Stop();
+        if (sharedMusicSource != null) sharedMusicSource.Stop();
+        if (sharedBackgroundMusicSource != null) sharedBackgroundMusicSource.Stop();
+    }
+
+    public static void StopAllAlertAudioForSceneChange()
+    {
+        AlertingEnemies.Clear();
+        StopSharedAudio();
     }
 
     private void RegisterAlertingEnemy()
@@ -706,7 +741,14 @@ public class EnemyFSM : MonoBehaviour
 
     private void AttackPlayer()
     {
-        Debug.Log("Enemy attacks Player!");
+        if (GameManager.Instance == null || GameManager.Instance.CurrentGameState != GameState.Playing || player == null)
+            return;
+        if (Vector3.Distance(transform.position, player.position) > attackRange || !perception.CanSeePlayer)
+            return;
+
+        PlayerCapture capture = player.GetComponent<PlayerCapture>();
+        if (capture != null) capture.Capture();
+        else GameManager.Instance.CapturePlayer();
     }
 
     private void FacePlayer()

@@ -1,0 +1,167 @@
+.failure-root {
+    width: 100%;
+    height: 100%;
+    color: rgb(231, 240, 245);
+}
+
+.failure-screen {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    background-color: rgb(8, 5, 7);
+}
+
+.failure-background {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    -unity-background-scale-mode: scale-and-crop;
+}
+
+.failure-tint {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    background-color: rgba(18, 0, 3, 0.25);
+}
+
+.failure-card {
+    position: relative;
+    width: 50%;
+    min-width: 650px;
+    max-width: 1050px;
+    padding-top: 24px;
+    padding-right: 76px;
+    padding-bottom: 30px;
+    padding-left: 76px;
+    align-items: center;
+    background-color: rgba(6, 11, 15, 0.88);
+    border-top-width: 1px;
+    border-right-width: 1px;
+    border-bottom-width: 1px;
+    border-left-width: 1px;
+    border-top-color: rgba(173, 199, 209, 0.68);
+    border-right-color: rgba(173, 199, 209, 0.68);
+    border-bottom-color: rgba(173, 199, 209, 0.68);
+    border-left-color: rgba(173, 199, 209, 0.68);
+}
+
+.failure-brand {
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 5px;
+}
+
+.failure-brand-light,
+.failure-brand-red {
+    font-size: 21px;
+    letter-spacing: 8px;
+    -unity-font-style: bold;
+}
+
+.failure-brand-light {
+    color: rgb(216, 230, 237);
+    margin-right: 12px;
+}
+
+.failure-brand-red {
+    color: rgb(255, 56, 64);
+}
+
+.failure-operation {
+    color: rgb(178, 196, 205);
+    font-size: 12px;
+    letter-spacing: 6px;
+    margin-bottom: 22px;
+}
+
+.failure-rule {
+    width: 100%;
+    height: 1px;
+    background-color: rgba(176, 199, 209, 0.34);
+    margin-bottom: 26px;
+}
+
+.failure-title {
+    color: rgb(255, 55, 62);
+    font-size: 62px;
+    letter-spacing: 5px;
+    -unity-font-style: bold;
+    margin-bottom: 6px;
+    -unity-text-align: middle-center;
+}
+
+.failure-warning {
+    color: rgb(255, 65, 70);
+    font-size: 20px;
+    letter-spacing: 6px;
+    margin-bottom: 14px;
+}
+
+.failure-description {
+    color: rgb(203, 216, 222);
+    font-size: 17px;
+    white-space: normal;
+    -unity-text-align: middle-center;
+    margin-bottom: 28px;
+}
+
+.failure-button {
+    width: 72%;
+    height: 60px;
+    margin-top: 7px;
+    margin-bottom: 7px;
+    color: rgb(207, 222, 230);
+    background-color: rgba(3, 12, 17, 0.78);
+    border-top-width: 1px;
+    border-right-width: 1px;
+    border-bottom-width: 1px;
+    border-left-width: 1px;
+    border-top-color: rgba(170, 201, 213, 0.72);
+    border-right-color: rgba(170, 201, 213, 0.72);
+    border-bottom-color: rgba(170, 201, 213, 0.72);
+    border-left-color: rgba(170, 201, 213, 0.72);
+    font-size: 16px;
+    letter-spacing: 5px;
+    -unity-text-align: middle-center;
+    padding-left: 12px;
+    padding-right: 12px;
+}
+
+.failure-button:hover,
+.failure-button:focus {
+    color: white;
+    background-color: rgba(115, 10, 16, 0.68);
+    border-top-color: rgb(255, 57, 64);
+    border-right-color: rgb(255, 57, 64);
+    border-bottom-color: rgb(255, 57, 64);
+    border-left-color: rgb(255, 57, 64);
+}
+
+.failure-button-primary {
+    color: rgb(255, 235, 236);
+    background-color: rgba(102, 5, 12, 0.6);
+    border-top-width: 2px;
+    border-right-width: 2px;
+    border-bottom-width: 2px;
+    border-left-width: 2px;
+    border-top-color: rgb(255, 57, 64);
+    border-right-color: rgb(255, 57, 64);
+    border-bottom-color: rgb(255, 57, 64);
+    border-left-color: rgb(255, 57, 64);
+}
+
+.failure-button-primary:hover,
+.failure-button-primary:focus {
+    background-color: rgba(174, 12, 20, 0.78);
+}

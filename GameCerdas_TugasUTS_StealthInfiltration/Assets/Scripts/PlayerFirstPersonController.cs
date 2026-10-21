@@ -145,6 +145,11 @@ public class PlayerFirstPersonController : MonoBehaviour
 
     private void Update()
     {
+        if (GameManager.Instance != null && GameManager.Instance.CurrentGameState != GameState.Playing)
+        {
+            IsSprinting = false;
+            return;
+        }
         if (runtimeActions == null || characterController == null)
             return;
 
@@ -282,12 +287,14 @@ public class PlayerFirstPersonController : MonoBehaviour
         playerCamera.fieldOfView = Mathf.Lerp(playerCamera.fieldOfView, target, fovSmoothSpeed * Time.deltaTime);
     }
 
-    private void SetCursorLocked(bool locked)
+    public void SetGameplayCursorLocked(bool locked)
     {
         cursorLocked = locked;
         Cursor.lockState = locked ? CursorLockMode.Locked : CursorLockMode.None;
         Cursor.visible = !locked;
     }
+
+    private void SetCursorLocked(bool locked) => SetGameplayCursorLocked(locked);
 
     private float ClampPitch(float value)
     {
