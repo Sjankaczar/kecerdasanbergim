@@ -1,0 +1,21 @@
+.victory-root { flex-grow: 1; }
+.victory-screen { position: absolute; left: 0; right: 0; top: 0; bottom: 0; align-items: center; justify-content: center; }
+.victory-background { position: absolute; left: 0; right: 0; top: 0; bottom: 0; background-size: cover; background-position: center; }
+.victory-tint { position: absolute; left: 0; right: 0; top: 0; bottom: 0; background-color: rgba(1, 9, 16, 0.25); }
+.victory-card { position: relative; width: 74%; max-width: 1240px; min-width: 720px; min-height: 760px; padding: 28px 8% 34px; align-items: center; justify-content: flex-start; background-color: rgba(3, 17, 27, 0.67); border-left-width: 1px; border-right-width: 1px; border-top-width: 1px; border-bottom-width: 1px; border-left-color: rgba(106, 224, 255, 0.8); border-right-color: rgba(106, 224, 255, 0.8); border-top-color: rgba(106, 224, 255, 0.8); border-bottom-color: rgba(106, 224, 255, 0.8); }
+.victory-brand { flex-direction: row; justify-content: center; align-items: center; margin-bottom: 2px; }
+.victory-brand-light, .victory-brand-accent { font-size: 29px; -unity-font-style: bold; letter-spacing: 9px; -unity-text-align: middle-center; }
+.victory-brand-light { color: #e8f8ff; }
+.victory-brand-accent { color: #28e9ed; margin-left: 12px; }
+.victory-operation { color: #a9c9d8; font-size: 15px; letter-spacing: 7px; margin-bottom: 24px; -unity-text-align: middle-center; }
+.victory-metadata { width: 100%; flex-direction: row; justify-content: space-between; margin-bottom: 8px; }
+.victory-meta-copy, .victory-meta-status { color: #91b4c7; font-size: 13px; letter-spacing: 2px; white-space: normal; }
+.victory-meta-status { -unity-text-align: upper-right; }
+.victory-vial-mark { width: 190px; height: 155px; color: #55dafa; font-size: 112px; -unity-text-align: middle-center; -unity-font-style: bold; }
+.victory-title { color: #e7faff; font-size: 47px; letter-spacing: 12px; -unity-font-style: bold; -unity-text-align: middle-center; white-space: nowrap; -unity-text-outline-width: 1px; -unity-text-outline-color: rgba(57, 206, 255, 0.75); }
+.victory-success { color: #31edbd; font-size: 22px; letter-spacing: 9px; margin-top: 14px; margin-bottom: 22px; -unity-text-align: middle-center; }
+.victory-description { color: #c2dce9; font-size: 18px; letter-spacing: 1px; white-space: normal; -unity-text-align: middle-center; margin-bottom: 28px; }
+.victory-actions { width: 100%; flex-direction: row; justify-content: center; align-items: center; }
+.victory-button { width: 42%; height: 78px; margin-left: 12px; margin-right: 12px; background-color: rgba(4, 22, 34, 0.9); border-left-width: 1px; border-right-width: 1px; border-top-width: 1px; border-bottom-width: 1px; border-left-color: #7bb1c9; border-right-color: #7bb1c9; border-top-color: #7bb1c9; border-bottom-color: #7bb1c9; color: #d7f1fb; font-size: 19px; letter-spacing: 4px; -unity-text-align: middle-center; }
+.victory-button:hover { background-color: rgba(5, 73, 94, 0.95); border-left-color: #31eaff; border-right-color: #31eaff; border-top-color: #31eaff; border-bottom-color: #31eaff; }
+.victory-button-primary { background-color: rgba(0, 156, 205, 0.78); border-left-width: 2px; border-right-width: 2px; border-top-width: 2px; border-bottom-width: 2px; border-left-color: #39eaff; border-right-color: #39eaff; border-top-color: #39eaff; border-bottom-color: #39eaff; color: white; }
