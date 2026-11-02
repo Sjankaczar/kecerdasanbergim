@@ -24,6 +24,7 @@ public class EnemyFSM : MonoBehaviour
     [SerializeField] private Transform player;
     [SerializeField] private NavMeshAgent agent;
     [SerializeField] private EnemyPerception perception;
+    [SerializeField] private Animator animator;
 
     [Header("Patrol")]
     [SerializeField] private IdleBehavior idleBehavior = IdleBehavior.Patrol;
@@ -61,9 +62,11 @@ public class EnemyFSM : MonoBehaviour
     [SerializeField] private float searchLookSpeed = 120f;
 
     [Header("Attack")]
-    [SerializeField] private float attackRange = 2f;
-    [SerializeField] private float attackExitRange = 2.75f;
+    [SerializeField] private float attackRange = 0.9f;
+    [SerializeField] private float attackExitRange = 1.15f;
     [SerializeField] private float attackCooldown = 1.5f;
+
+    private static readonly int MotionParameter = Animator.StringToHash("Motion");
 
     [Header("Debug")]
     [SerializeField] private EnemyState currentState;
@@ -116,6 +119,9 @@ public class EnemyFSM : MonoBehaviour
         if (perception == null)
             perception = GetComponent<EnemyPerception>();
 
+        if (animator == null)
+            animator = GetComponentInChildren<Animator>();
+
         childRenderers = GetComponentsInChildren<Renderer>();
         EnsureSharedAlertAudio();
         if (footstepsClip != null)
@@ -141,6 +147,7 @@ public class EnemyFSM : MonoBehaviour
         lookAroundCenterRotation = transform.rotation;
         currentState = EnemyState.Patrol;
         EnterState(currentState);
+        UpdateAnimation();
     }
 
     private void Update()
@@ -159,6 +166,12 @@ public class EnemyFSM : MonoBehaviour
             }
             return;
         }
+        if (player != null && Vector3.Distance(transform.position, player.position) <= attackRange)
+        {
+            CapturePlayerOnContact();
+            return;
+        }
+
         // ================================
         // MEMORY
         // ================================
@@ -209,8 +222,29 @@ public class EnemyFSM : MonoBehaviour
         }
 
         UpdatePatrolFootsteps();
+        UpdateAnimation();
     }
 
+    private void UpdateAnimation()
+    {
+        if (animator == null)
+            return;
+
+        int motion = 0; // Idle
+        if (currentState == EnemyState.Chase)
+        {
+            motion = 2; // Running
+        }
+        else if ((currentState == EnemyState.Patrol && idleBehavior == IdleBehavior.Patrol) ||
+                 currentState == EnemyState.Alert || currentState == EnemyState.Search)
+        {
+            bool isMoving = agent != null && !agent.isStopped && agent.velocity.sqrMagnitude > 0.04f;
+            if (isMoving)
+                motion = 1; // Walking
+        }
+
+        animator.SetInteger(MotionParameter, motion);
+    }
     private void UpdatePatrolFootsteps()
     {
         if (footstepsSource == null)
@@ -739,6 +773,18 @@ public class EnemyFSM : MonoBehaviour
         }
     }
 
+    private void CapturePlayerOnContact()
+    {
+        if (GameManager.Instance == null)
+            return;
+
+        PlayerCapture capture = player != null ? player.GetComponent<PlayerCapture>() : null;
+        if (capture != null)
+            capture.Capture();
+        else
+            GameManager.Instance.CapturePlayer();
+    }
+
     private void AttackPlayer()
     {
         if (GameManager.Instance == null || GameManager.Instance.CurrentGameState != GameState.Playing || player == null)
@@ -746,9 +792,7 @@ public class EnemyFSM : MonoBehaviour
         if (Vector3.Distance(transform.position, player.position) > attackRange || !perception.CanSeePlayer)
             return;
 
-        PlayerCapture capture = player.GetComponent<PlayerCapture>();
-        if (capture != null) capture.Capture();
-        else GameManager.Instance.CapturePlayer();
+        CapturePlayerOnContact();
     }
 
     private void FacePlayer()

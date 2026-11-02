@@ -1,0 +1,68 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements">
+    <Style src="ProtocolZeroMenu.uss" />
+    <ui:VisualElement name="protocol-root" class="protocol-root">
+        <ui:VisualElement class="menu-screen">
+            <ui:VisualElement class="menu-background" />
+            <ui:VisualElement class="left-shade" />
+            <ui:VisualElement class="screen-frame" />
+            <ui:VisualElement class="top-header">
+                <ui:VisualElement class="facility-identity">
+                    <ui:Label text="△" class="facility-emblem" />
+                    <ui:Label text="CLASSIFIED  //  RESEARCH FACILITY" class="micro-label" />
+                </ui:VisualElement>
+                <ui:VisualElement class="clearance-block">
+                    <ui:Label text="SITE A7&#10;SECURITY LEVEL" class="micro-label" />
+                    <ui:Label text="TOP SECRET" class="secret-label" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+
+            <ui:VisualElement name="menu-page" class="menu-content">
+                <ui:Label text="PROTOCOL" class="title-protocol" />
+                <ui:VisualElement class="title-line" />
+                <ui:Label text="ZERO" class="title-zero" />
+                <ui:Label text="ONE MISSION.  NO SECOND CHANCES." class="tagline" />
+                <ui:VisualElement class="menu-buttons">
+                    <ui:Button name="play-button" class="menu-button menu-button-primary"><ui:Label text="▶" class="button-icon"/><ui:Label text="PLAY" class="button-title"/><ui:Label text=">" class="button-arrow"/></ui:Button>
+                    <ui:Button name="how-to-button" class="menu-button"><ui:Label text="◤" class="button-icon"/><ui:Label text="HOW TO PLAY" class="button-title"/><ui:Label text=">" class="button-arrow"/></ui:Button>
+                    <ui:Button name="options-button" class="menu-button"><ui:Label text="⚙" class="button-icon"/><ui:Label text="OPTIONS" class="button-title"/><ui:Label text=">" class="button-arrow"/></ui:Button>
+                    <ui:Button name="quit-button" class="menu-button"><ui:Label text="⏻" class="button-icon"/><ui:Label text="QUIT" class="button-title"/><ui:Label text=">" class="button-arrow"/></ui:Button>
+                </ui:VisualElement>
+            </ui:VisualElement>
+
+            <ui:VisualElement class="bottom-footer">
+                <ui:VisualElement>
+                    <ui:Label text="OPERATION  BLACK VIAL" class="micro-label" />
+                    <ui:Label text="FACILITY A7-0042  //  RESEARCH DIVISION  //  CLEARANCE OMEGA" class="tiny-label" />
+                </ui:VisualElement>
+                <ui:VisualElement class="system-status">
+                    <ui:Label text="SYSTEM STATUS:" class="micro-label" />
+                    <ui:Label text="READY  ✓" class="ready-label" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+
+            <ui:VisualElement name="how-to-page" class="subpage-overlay" style="display: none;">
+                <ui:VisualElement class="subpage-card">
+                    <ui:Label text="MISSION BRIEFING" class="subpage-title" />
+                    <ui:Label text="Infiltrate a restricted underground research facility. Retrieve the classified experimental vial and reach extraction without being captured by security." class="briefing-copy" />
+                    <ui:Label text="01  INFILTRATE&#10;Navigate through the underground laboratory.&#10;&#10;02  EVADE&#10;Avoid detection by robotic security patrols.&#10;&#10;03  RETRIEVE&#10;Locate and collect the experimental vial.&#10;&#10;04  EXTRACT&#10;Reach the extraction point to complete the mission." class="briefing-copy" />
+                    <ui:Label text="CONTROLS&#10;W A S D  —  MOVE&#10;MOUSE  —  LOOK&#10;LEFT SHIFT  —  SPRINT&#10;E  —  COLLECT&#10;ESC  —  PAUSE / RESUME" class="briefing-copy" />
+                    <ui:Button name="how-to-back" text="&lt;   BACK" class="back-button" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+
+            <ui:VisualElement name="options-page" class="subpage-overlay" style="display: none;">
+                <ui:VisualElement class="subpage-card">
+                    <ui:Label text="SYSTEM OPTIONS" class="subpage-title" />
+                    <ui:VisualElement name="options-controls">
+                        <ui:Slider name="master-volume" label="MASTER VOLUME" low-value="0" high-value="1" value="0.8" class="option-slider" />
+                        <ui:Slider name="music-volume" label="MUSIC VOLUME" low-value="0" high-value="1" value="0.8" class="option-slider" />
+                        <ui:Slider name="sfx-volume" label="SFX VOLUME" low-value="0" high-value="1" value="0.8" class="option-slider" />
+                        <ui:Toggle name="fullscreen-toggle" label="FULLSCREEN" class="option-toggle" />
+                        <ui:DropdownField name="resolution-dropdown" label="RESOLUTION" class="option-dropdown" />
+                    </ui:VisualElement>
+                    <ui:Button name="options-back" text="&lt;   BACK" class="back-button" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

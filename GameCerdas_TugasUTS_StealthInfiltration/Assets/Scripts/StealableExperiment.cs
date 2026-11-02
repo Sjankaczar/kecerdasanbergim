@@ -10,10 +10,18 @@ public class StealableExperiment : MonoBehaviour
     public TextMeshProUGUI interactionText;
 
     public float interactionDistance = 2f;
+    [Min(0f)] public float bobHeight = 0.25f;
+    [Min(0f)] public float bobSpeed = 1.5f;
 
     private bool isStolen = false;
     private bool wasInteractable;
+    private Vector3 startingPosition;
     public event Action<bool> InteractionAvailabilityChanged;
+
+    void Start()
+    {
+        startingPosition = transform.position;
+    }
 
     public bool IsStolen
     {
@@ -22,6 +30,13 @@ public class StealableExperiment : MonoBehaviour
 
     void Update()
     {
+        if (!isStolen)
+        {
+            // Sinusoidal motion eases naturally at the top and bottom of the bob.
+            float bobOffset = Mathf.Sin(Time.time * bobSpeed) * bobHeight;
+            transform.position = startingPosition + Vector3.up * bobOffset;
+        }
+
         if (isStolen || player == null || carryPoint == null || GameManager.Instance == null)
             return;
 

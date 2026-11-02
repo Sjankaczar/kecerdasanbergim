@@ -1,0 +1,52 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" editor-extension-mode="False">
+    <Style src="project://database/Assets/Resources/ProtocolZeroPause.uss?fileID=7433441132597879392&amp;guid=ff4b4538180aa8241af833c0b79b8714&amp;type=3#ProtocolZeroPause"/>
+    <ui:VisualElement name="pause-root" class="pause-root" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%;">
+        <ui:VisualElement name="pause-screen" class="pause-screen" style="position: absolute; left: 0; top: 0; right: 0; bottom: 0;">
+            <ui:VisualElement class="pause-background" style="position: absolute; left: 0; top: 0; right: 0; bottom: 0;"/>
+            <ui:VisualElement class="pause-dim" style="position: absolute; left: 0; top: 0; right: 2px; bottom: 4px;"/>
+            <ui:VisualElement class="pause-layout" style="position: absolute; left: 16%; top: 15%; width: 68%; height: 70%;">
+                <ui:VisualElement class="pause-main-panel" style="position: absolute; left: 3px; top: 23px; width: 58%; height: 745px; min-width: 0; padding: 0;">
+                    <ui:Label text="OPERATION BLACK VIAL" name="Label" class="pause-operation" style="position: absolute; left: 209px; top: 81px; width: 345px; height: 50px; margin: 0; -unity-text-align: middle-center; font-size: 18px;"/>
+                    <ui:VisualElement class="pause-divider" style="position: absolute; left: 8%; top: 24%; width: 84%; height: 1px; margin: 0;"/>
+                    <ui:Label text="MISSION PAUSED" class="pause-title" style="position: absolute; left: 4%; top: 30%; width: 92%; height: 58px; margin: 0;"/>
+                    <ui:Label text="ONE MISSION.  NO SECOND CHANCES." class="pause-tagline" style="position: absolute; left: 176px; top: 293px; width: 372px; height: 43px; margin: 0; -unity-text-align: middle-center; font-size: 19px;"/>
+                    <ui:VisualElement class="pause-actions" style="position: absolute; left: 10%; top: 49%; width: 80%; height: 47%; flex-grow: 0;">
+                        <ui:Button name="resume-button" text="RESUME" class="pause-action-button pause-action-primary" style="position: absolute; left: 0; right: 0; top: 0; height: 54px; margin: 0;"/>
+                        <ui:Button name="restart-button" text="RESTART MISSION" class="pause-action-button" style="position: absolute; left: 0; right: 0; top: 64px; height: 54px; margin: 0;"/>
+                        <ui:Button name="pause-options-button" text="OPTIONS" class="pause-action-button" style="position: absolute; left: 0; right: 0; top: 128px; height: 54px; margin: 0;"/>
+                        <ui:Button name="main-menu-button" text="MAIN MENU" class="pause-action-button" style="position: absolute; left: 0; right: 0; top: 192px; height: 54px; margin: 0;"/>
+                    </ui:VisualElement>
+                    <ui:VisualElement class="pause-brand" style="position: absolute; left: 252px; top: 55px; width: 486px; height: 42px; margin: 0;">
+                        <ui:Label text="PROTOCOL" class="pause-brand-light" style="position: absolute; left: -41px; top: 0; width: 42%; height: 42px; margin: 0; -unity-text-align: middle-right;"/>
+                        <ui:Label text="ZERO" class="pause-brand-red" style="position: absolute; left: 175px; top: 1px; width: 22%; height: 42px; margin: 0;"/>
+                    </ui:VisualElement>
+                </ui:VisualElement>
+                <ui:VisualElement name="pause-options-panel" class="pause-options-panel" style="position: absolute; left: 60%; top: 5%; width: 40%; height: 90%; min-width: 0; margin: 0; padding: 0;">
+                    <ui:Label text="OPTIONS" class="options-title" style="position: absolute; left: 6%; top: 5%; width: 212px; height: 64px; margin: 0; font-size: 38px;"/>
+                    <ui:VisualElement class="options-divider" style="position: absolute; left: 6%; top: 14%; width: 88%; height: 1px; margin: 0;"/>
+                    <ui:VisualElement name="pause-options-controls" class="pause-options-controls" style="position: absolute; left: 6%; top: 19%; width: 88%; height: 356px; bottom: auto;">
+                        <ui:VisualElement class="audio-row" style="position: absolute; left: 0; top: 0; width: 100%; height: 45px; min-height: 0;">
+                            <ui:Label text="MASTER VOLUME" class="audio-label" style="position: absolute; left: 0; top: 0; width: 39%; height: 45px; font-size: 19px;"/>
+                            <ui:Slider name="master-volume" low-value="0" high-value="1" value="0.8" class="audio-slider" style="position: absolute; left: 40%; top: 10px; width: 46%; height: 24px;"/>
+                            <ui:Label name="master-volume-percent" text="80%" class="audio-percentage" style="position: absolute; left: 87%; top: 0; width: 13%; height: 45px; font-size: 22px;"/>
+                        </ui:VisualElement>
+                        <ui:VisualElement class="audio-row" style="position: absolute; left: 0; top: 54px; width: 100%; height: 45px; min-height: 0;">
+                            <ui:Label text="MUSIC VOLUME" class="audio-label" style="position: absolute; left: 0; top: 0; width: 39%; height: 45px; font-size: 19px;"/>
+                            <ui:Slider name="music-volume" low-value="0" high-value="1" value="0.8" class="audio-slider" style="position: absolute; left: 40%; top: 10px; width: 46%; height: 24px;"/>
+                            <ui:Label name="music-volume-percent" text="80%" class="audio-percentage" style="position: absolute; left: 87%; top: 0; width: 13%; height: 45px; font-size: 22px;"/>
+                        </ui:VisualElement>
+                        <ui:VisualElement class="audio-row" style="position: absolute; left: 0; top: 108px; width: 100%; height: 45px; min-height: 0;">
+                            <ui:Label text="SFX VOLUME" class="audio-label" style="position: absolute; left: 0; top: 0; width: 39%; height: 45px; font-size: 19px;"/>
+                            <ui:Slider name="sfx-volume" low-value="0" high-value="1" value="0.8" class="audio-slider" style="position: absolute; left: 40%; top: 10px; width: 46%; height: 24px;"/>
+                            <ui:Label name="sfx-volume-percent" text="80%" class="audio-percentage" style="position: absolute; left: 87%; top: 0; width: 13%; height: 45px; font-size: 22px;"/>
+                        </ui:VisualElement>
+                        <ui:VisualElement class="options-divider" style="position: absolute; left: 0; top: 162px; width: 100%; height: 1px; margin: 0;"/>
+                        <ui:Toggle name="fullscreen-toggle" label="FULLSCREEN" class="pause-toggle" style="position: absolute; left: 0; top: 180px; width: 100%; height: 40px; margin: 0;"/>
+                        <ui:DropdownField name="resolution-dropdown" label="RESOLUTION" class="pause-resolution" style="position: absolute; left: 0; top: 232px; width: 100%; height: 42px; margin: 0;"/>
+                    </ui:VisualElement>
+                </ui:VisualElement>
+            </ui:VisualElement>
+            <ui:Label text="ESC   TO RESUME" class="pause-escape-hint" style="position: absolute; right: 3.2%; bottom: 4.6%; width: 230px; height: 24px;"/>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

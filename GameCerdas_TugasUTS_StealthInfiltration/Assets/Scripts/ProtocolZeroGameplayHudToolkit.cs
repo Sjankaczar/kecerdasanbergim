@@ -11,6 +11,8 @@ public sealed class ProtocolZeroGameplayHudToolkit : MonoBehaviour
     private Label detectionStatus;
     private VisualElement detectionAccent;
     private VisualElement interactionPrompt;
+    private Label interactionKey;
+    private Label interactionCopy;
     private Label notificationLabel;
     private VisualElement notificationPanel;
     private float notificationUntil;
@@ -28,64 +30,27 @@ public sealed class ProtocolZeroGameplayHudToolkit : MonoBehaviour
         document.panelSettings = runtimePanelSettings;
         VisualElement root = document.rootVisualElement;
         root.Clear();
-        root.AddToClassList("gameplay-hud-root");
-        StyleSheet sheet = Resources.Load<StyleSheet>("ProtocolZeroGameplayHud");
-        if (sheet != null) root.styleSheets.Add(sheet);
 
-        VisualElement objective = new VisualElement();
-        objective.AddToClassList("hud-objective-card");
-        root.Add(objective);
-        VisualElement objectiveAccent = new VisualElement();
-        objectiveAccent.AddToClassList("hud-objective-accent");
-        objective.Add(objectiveAccent);
-        Label eyebrow = new Label("MISSION OBJECTIVE");
-        eyebrow.AddToClassList("hud-eyebrow");
-        objective.Add(eyebrow);
-        objectiveNumber = new Label("01 / 02");
-        objectiveNumber.AddToClassList("hud-objective-number");
-        objective.Add(objectiveNumber);
-        objectiveTitle = new Label("Retrieve the Experiment");
-        objectiveTitle.AddToClassList("hud-objective-title");
-        objective.Add(objectiveTitle);
-        objectiveDescription = new Label("Find and collect the experimental potion.");
-        objectiveDescription.AddToClassList("hud-objective-description");
-        objective.Add(objectiveDescription);
+        VisualTreeAsset layout = Resources.Load<VisualTreeAsset>("ProtocolZeroGameplayHud");
+        if (layout == null)
+        {
+            Debug.LogError("UXML ProtocolZeroGameplayHud tidak ditemukan di Assets/Resources.");
+            return;
+        }
+        layout.CloneTree(root);
 
-        VisualElement threat = new VisualElement();
-        threat.AddToClassList("hud-threat-card");
-        root.Add(threat);
-        detectionAccent = new VisualElement();
-        detectionAccent.AddToClassList("hud-threat-accent");
-        threat.Add(detectionAccent);
-        Label threatLabel = new Label("SECURITY STATUS");
-        threatLabel.AddToClassList("hud-threat-label");
-        threat.Add(threatLabel);
-        detectionStatus = new Label("UNDETECTED");
-        detectionStatus.AddToClassList("hud-threat-status");
-        threat.Add(detectionStatus);
-
-        interactionPrompt = new VisualElement();
-        interactionPrompt.AddToClassList("hud-interaction-prompt");
+        objectiveNumber = root.Q<Label>("objective-number");
+        objectiveTitle = root.Q<Label>("objective-title");
+        objectiveDescription = root.Q<Label>("objective-description");
+        detectionStatus = root.Q<Label>("detection-status");
+        detectionAccent = root.Q<VisualElement>("detection-accent");
+        interactionPrompt = root.Q<VisualElement>("interaction-prompt");
+        interactionKey = root.Q<Label>("interaction-key");
+        interactionCopy = root.Q<Label>("interaction-copy");
         interactionPrompt.style.display = DisplayStyle.None;
-        root.Add(interactionPrompt);
-        Label key = new Label("E");
-        key.AddToClassList("hud-interaction-key");
-        interactionPrompt.Add(key);
-        Label prompt = new Label("COLLECT EXPERIMENT");
-        prompt.AddToClassList("hud-interaction-copy");
-        interactionPrompt.Add(prompt);
-
-        Label controls = new Label("WASD MOVE   |   SHIFT SPRINT   |   E COLLECT   |   ESC PAUSE");
-        controls.AddToClassList("hud-controls-hint");
-        root.Add(controls);
-
-        notificationPanel = new VisualElement();
-        notificationPanel.AddToClassList("hud-notification");
+        notificationPanel = root.Q<VisualElement>("notification-panel");
         notificationPanel.style.opacity = 0f;
-        root.Add(notificationPanel);
-        notificationLabel = new Label();
-        notificationLabel.AddToClassList("hud-notification-copy");
-        notificationPanel.Add(notificationLabel);
+        notificationLabel = root.Q<Label>("notification-label");
     }
 
     private void OnDestroy()
@@ -115,6 +80,13 @@ public sealed class ProtocolZeroGameplayHudToolkit : MonoBehaviour
     {
         if (interactionPrompt != null)
             interactionPrompt.style.display = visible ? DisplayStyle.Flex : DisplayStyle.None;
+    }
+
+    public void SetInteractionPrompt(string key, string message, bool visible)
+    {
+        if (interactionKey != null) interactionKey.text = key;
+        if (interactionCopy != null) interactionCopy.text = message;
+        SetInteractionVisible(visible);
     }
 
     public void ShowNotification(string message)

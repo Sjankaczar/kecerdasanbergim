@@ -40,33 +40,49 @@ public sealed class ProtocolZeroPauseToolkit : MonoBehaviour
         document.panelSettings = runtimePanelSettings;
         VisualElement root = document.rootVisualElement;
         root.Clear();
-        root.AddToClassList("pause-root");
-        StyleSheet styleSheet = Resources.Load<StyleSheet>("ProtocolZeroPause");
-        if (styleSheet != null) root.styleSheets.Add(styleSheet);
+        VisualTreeAsset layout = Resources.Load<VisualTreeAsset>("ProtocolZeroPause");
+        if (layout == null)
+        {
+            Debug.LogError("UXML ProtocolZeroPause tidak ditemukan di Assets/Resources.");
+            return;
+        }
+        layout.CloneTree(root);
 
-        pauseScreen = new VisualElement();
-        pauseScreen.AddToClassList("pause-screen");
-        pauseScreen.style.display = DisplayStyle.None;
-        root.Add(pauseScreen);
-
-        VisualElement background = new VisualElement();
-        background.AddToClassList("pause-background");
+        pauseScreen = root.Q<VisualElement>("pause-screen");
+        VisualElement background = root.Q<VisualElement>(className: "pause-background");
         Texture2D texture = Resources.Load<Texture2D>("ProtocolZeroPausedBackground");
         if (texture != null) background.style.backgroundImage = new StyleBackground(texture);
-        pauseScreen.Add(background);
-        VisualElement dim = new VisualElement();
-        dim.AddToClassList("pause-dim");
-        pauseScreen.Add(dim);
 
-        VisualElement layout = new VisualElement();
-        layout.AddToClassList("pause-layout");
-        pauseScreen.Add(layout);
-        BuildMainPanel(layout);
-        BuildOptionsPanel(layout);
+        root.Q<Button>("resume-button").clicked += () => manager?.SetPaused(false);
+        root.Q<Button>("restart-button").clicked += () => manager?.RestartMission();
+        root.Q<Button>("pause-options-button").clicked += () => masterVolumeSlider?.Focus();
+        root.Q<Button>("main-menu-button").clicked += () =>
+        {
+            if (manager != null) manager.ReturnToMainMenu();
+            else SceneManager.LoadScene("MainMenu");
+        };
 
-        Label hint = new Label("ESC   TO RESUME");
-        hint.AddToClassList("pause-escape-hint");
-        pauseScreen.Add(hint);
+        VisualElement controls = root.Q<VisualElement>("pause-options-controls");
+        masterVolumeSlider = BindVolumeSlider(controls, "master-volume", "master-volume-percent", AudioPreferences.Master, AudioPreferences.SetMaster);
+        BindVolumeSlider(controls, "music-volume", "music-volume-percent", AudioPreferences.Music, AudioPreferences.SetMusic);
+        BindVolumeSlider(controls, "sfx-volume", "sfx-volume-percent", AudioPreferences.Sfx, AudioPreferences.SetSfx);
+
+        Toggle fullscreen = root.Q<Toggle>("fullscreen-toggle");
+        fullscreen.SetValueWithoutNotify(Screen.fullScreen);
+        fullscreen.RegisterValueChangedCallback(evt =>
+        {
+            Screen.fullScreen = evt.newValue;
+            PlayerPrefs.SetInt("display.fullscreen", evt.newValue ? 1 : 0);
+            PlayerPrefs.Save();
+        });
+        resolutions.Clear();
+        resolutions.AddRange(Screen.resolutions);
+        List<string> choices = resolutions.Select(r => $"{r.width} × {r.height}").Distinct().ToList();
+        if (choices.Count == 0) choices.Add($"{Screen.width} × {Screen.height}");
+        DropdownField resolution = root.Q<DropdownField>("resolution-dropdown");
+        resolution.choices = choices;
+        resolution.index = FindCurrentResolutionIndex(choices);
+        resolution.RegisterValueChangedCallback(evt => ApplyResolution(evt.newValue));
     }
 
     private void BuildMainPanel(VisualElement parent)
@@ -175,6 +191,20 @@ public sealed class ProtocolZeroPauseToolkit : MonoBehaviour
         });
     }
 
+    private Slider BindVolumeSlider(VisualElement parent, string sliderName, string percentageName, float value, System.Action<float> changed)
+    {
+        Slider slider = parent.Q<Slider>(sliderName);
+        Label percentage = parent.Q<Label>(percentageName);
+        slider.SetValueWithoutNotify(value);
+        percentage.text = $"{Mathf.RoundToInt(value * 100f)}%";
+        slider.RegisterValueChangedCallback(evt =>
+        {
+            changed(evt.newValue);
+            percentage.text = $"{Mathf.RoundToInt(evt.newValue * 100f)}%";
+        });
+        return slider;
+    }
+
     private void AddActionButton(VisualElement parent, string text, bool primary, System.Action action)
     {
         Button button = new Button(action) { text = text };
@@ -184,7 +214,7 @@ public sealed class ProtocolZeroPauseToolkit : MonoBehaviour
         parent.Add(button);
     }
 
-    private int FindCurrentResolutionIndex(List<string> choices)
+    private static int FindCurrentResolutionIndex(List<string> choices)
     {
         int index = choices.IndexOf($"{Screen.width} × {Screen.height}");
         return index >= 0 ? index : 0;

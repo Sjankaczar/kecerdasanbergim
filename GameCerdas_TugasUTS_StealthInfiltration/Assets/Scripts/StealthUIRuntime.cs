@@ -29,6 +29,7 @@ public sealed class StealthUIRuntime : MonoBehaviour
     private GameObject victoryToolkitObject;
     private GameObject gameplayHudToolkitObject;
     private ProtocolZeroGameplayHudToolkit gameplayHudToolkit;
+    private DoorInteraction rafliSceneDoorInteraction;
     private Canvas canvas;
     private Transform root;
     private TMP_FontAsset font;
@@ -77,16 +78,30 @@ public sealed class StealthUIRuntime : MonoBehaviour
 
     private void EnsureEventSystem()
     {
-        if (EventSystem.current != null) return;
-        GameObject eventObject = new GameObject("EventSystem", typeof(EventSystem));
-        DontDestroyOnLoad(eventObject);
-        InputSystemUIInputModule input = eventObject.AddComponent<InputSystemUIInputModule>();
-        input.AssignDefaultActions();
+        EventSystem eventSystem = EventSystem.current;
+        if (eventSystem == null)
+        {
+            GameObject eventObject = new GameObject("EventSystem", typeof(EventSystem));
+            DontDestroyOnLoad(eventObject);
+            eventSystem = eventObject.GetComponent<EventSystem>();
+        }
+
+        InputSystemUIInputModule input = eventSystem.GetComponent<InputSystemUIInputModule>();
+        if (input == null)
+        {
+            input = eventSystem.gameObject.AddComponent<InputSystemUIInputModule>();
+            input.AssignDefaultActions();
+        }
     }
 
     private void BuildFor(Scene scene)
     {
         UnbindGameplay();
+        if (rafliSceneDoorInteraction != null)
+        {
+            Destroy(rafliSceneDoorInteraction.gameObject);
+            rafliSceneDoorInteraction = null;
+        }
         if (canvasObject != null) Destroy(canvasObject);
         if (toolkitMenuObject != null) Destroy(toolkitMenuObject);
         if (failureToolkitObject != null) Destroy(failureToolkitObject);
@@ -110,6 +125,14 @@ public sealed class StealthUIRuntime : MonoBehaviour
         gameplayHudToolkit = gameplayHudToolkitObject.AddComponent<ProtocolZeroGameplayHudToolkit>();
         gameplayHudToolkit.Initialize();
         BuildGameplayUI();
+        if (scene.name == "RafliScene")
+        {
+            GameObject doorInteractionObject = new GameObject("RafliScene Door Interaction");
+            doorInteractionObject.transform.SetParent(transform, false);
+            rafliSceneDoorInteraction = doorInteractionObject.AddComponent<DoorInteraction>();
+            StealableExperiment experiment = experiments.Find(item => item != null);
+            rafliSceneDoorInteraction.Configure(player != null ? player.transform : null, experiment, gameplayHudToolkit);
+        }
         failureToolkitObject = new GameObject("Protocol Zero Failure Screen (UI Toolkit)");
         failureToolkitObject.transform.SetParent(transform, false);
         failureToolkitObject.AddComponent<ProtocolZeroFailureToolkit>().Initialize(manager);

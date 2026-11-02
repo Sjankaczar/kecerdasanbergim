@@ -6,7 +6,7 @@
 .hud-objective-title { color: #f0f6ff; font-size: 23px; -unity-font-style: bold; margin-bottom: 9px; transition-property: opacity; transition-duration: 180ms; }
 .hud-objective-title.hud-objective-pulse { opacity: 0.72; }
 .hud-objective-description { color: #b5c4d4; font-size: 15px; white-space: normal; }
-.hud-threat-card { position: absolute; right: 32px; top: 28px; width: 270px; height: 76px; padding-top: 12px; padding-bottom: 8px; padding-left: 16px; align-items: center; background-color: rgba(5, 16, 27, 0.86); border-left-width: 1px; border-right-width: 1px; border-top-width: 1px; border-bottom-width: 1px; border-left-color: rgba(80, 205, 235, 0.65); border-right-color: rgba(80, 205, 235, 0.65); border-top-color: rgba(80, 205, 235, 0.65); border-bottom-color: rgba(80, 205, 235, 0.65); }
+.hud-threat-card { position: absolute; right: 32px; top: 28px; width: 535px; height: 144px; padding-top: 12px; padding-bottom: 8px; padding-left: 16px; align-items: center; background-color: rgba(5, 16, 27, 0.86); border-left-width: 1px; border-right-width: 1px; border-top-width: 1px; border-bottom-width: 1px; border-left-color: rgba(80, 205, 235, 0.65); border-right-color: rgba(80, 205, 235, 0.65); border-top-color: rgba(80, 205, 235, 0.65); border-bottom-color: rgba(80, 205, 235, 0.65); }
 .hud-threat-accent { position: absolute; left: 0; top: 0; bottom: 0; width: 4px; background-color: #45e0a1; }
 .hud-threat-label { color: #98a9bc; font-size: 12px; letter-spacing: 2px; margin-bottom: 4px; }
 .hud-threat-status { color: #45e0a1; font-size: 19px; -unity-font-style: bold; letter-spacing: 2px; }
@@ -16,3 +16,22 @@
 .hud-controls-hint { position: absolute; left: 0; right: 0; bottom: 22px; color: rgba(185, 204, 219, 0.82); font-size: 13px; letter-spacing: 2px; -unity-text-align: middle-center; }
 .hud-notification { position: absolute; top: 28px; left: 30%; right: 30%; min-height: 48px; align-items: center; padding: 12px 24px; background-color: rgba(4, 20, 31, 0.94); border-left-width: 1px; border-right-width: 1px; border-top-width: 1px; border-bottom-width: 1px; border-left-color: rgba(0, 217, 255, 0.7); border-right-color: rgba(0, 217, 255, 0.7); border-top-color: rgba(0, 217, 255, 0.7); border-bottom-color: rgba(0, 217, 255, 0.7); }
 .hud-notification-copy { color: #57e9ff; font-size: 16px; -unity-font-style: bold; letter-spacing: 2px; -unity-text-align: middle-center; white-space: normal; }
+
+/* Keep the Builder preview and runtime HUD using the same absolute layout. */
+.gameplay-hud-root { position: relative; width: 100%; height: 100%; flex-grow: 0; }
+.hud-objective-card { position: absolute; box-sizing: border-box; }
+.hud-objective-accent { position: absolute; }
+.hud-eyebrow { position: absolute; left: 28px; top: 20px; width: 280px; height: 22px; margin: 0; }
+.hud-objective-number { position: absolute; right: 22px; top: 20px; width: 90px; height: 20px; }
+.hud-objective-title { position: absolute; left: 28px; top: 59px; width: 420px; height: 34px; margin: 0; }
+.hud-objective-description { position: absolute; left: 28px; top: 102px; width: 430px; height: 28px; }
+.hud-threat-card { position: absolute; box-sizing: border-box; }
+.hud-threat-accent { position: absolute; }
+.hud-threat-label { position: absolute; left: 16px; top: 12px; width: 230px; height: 20px; margin: 0; }
+.hud-threat-status { position: absolute; left: 16px; top: 37px; width: 230px; height: 27px; }
+.hud-interaction-prompt { position: absolute; left: 50%; right: auto; bottom: 106px; width: 536px; height: 98px; margin-left: -268px; box-sizing: border-box; }
+.hud-interaction-key { position: absolute; left: 24px; top: 12px; width: 34px; height: 34px; min-width: 0; margin: 0; padding-top: 4px; }
+.hud-interaction-copy { position: absolute; left: 72px; right: 24px; top: 15px; height: 30px; }
+.hud-controls-hint { position: absolute; height: 22px; }
+.hud-notification { position: absolute; left: 50%; right: auto; top: 28px; width: 640px; height: 64px; margin-left: -320px; box-sizing: border-box; }
+.hud-notification-copy { position: absolute; left: 12px; right: 12px; top: 8px; height: 48px; white-space: normal; }

@@ -67,35 +67,64 @@ public sealed class ProtocolZeroMainMenuToolkit : MonoBehaviour
     {
         VisualElement root = document.rootVisualElement;
         root.Clear();
-        root.AddToClassList("protocol-root");
+        VisualTreeAsset layout = Resources.Load<VisualTreeAsset>("ProtocolZeroMenu");
+        if (layout == null)
+        {
+            Debug.LogError("UXML ProtocolZeroMenu tidak ditemukan di Assets/Resources.");
+            return;
+        }
+        layout.CloneTree(root);
 
-        StyleSheet styleSheet = Resources.Load<StyleSheet>("ProtocolZeroMenu");
-        if (styleSheet != null) root.styleSheets.Add(styleSheet);
-
-        VisualElement screen = new VisualElement();
-        screen.AddToClassList("menu-screen");
-        root.Add(screen);
-
-        VisualElement backdrop = new VisualElement();
-        backdrop.AddToClassList("menu-background");
+        VisualElement backdrop = root.Q<VisualElement>(className: "menu-background");
         Texture2D background = Resources.Load<Texture2D>("ProtocolZeroMenuBackground");
         if (background != null) backdrop.style.backgroundImage = new StyleBackground(background);
-        screen.Add(backdrop);
 
-        VisualElement shade = new VisualElement();
-        shade.AddToClassList("left-shade");
-        screen.Add(shade);
+        menuPage = root.Q<VisualElement>("menu-page");
+        howToPage = root.Q<VisualElement>("how-to-page");
+        optionsPage = root.Q<VisualElement>("options-page");
+        root.Q<Button>("play-button").clicked += () => SceneManager.LoadScene("RafliScene");
+        root.Q<Button>("how-to-button").clicked += () => ShowPage(howToPage);
+        root.Q<Button>("options-button").clicked += () => ShowPage(optionsPage);
+        root.Q<Button>("quit-button").clicked += QuitGame;
+        root.Q<Button>("how-to-back").clicked += () => ShowPage(menuPage);
+        root.Q<Button>("options-back").clicked += () => ShowPage(menuPage);
 
-        VisualElement frame = new VisualElement();
-        frame.AddToClassList("screen-frame");
-        screen.Add(frame);
+        Slider master = root.Q<Slider>("master-volume");
+        Slider music = root.Q<Slider>("music-volume");
+        Slider sfx = root.Q<Slider>("sfx-volume");
+        master.SetValueWithoutNotify(AudioPreferences.Master);
+        music.SetValueWithoutNotify(AudioPreferences.Music);
+        sfx.SetValueWithoutNotify(AudioPreferences.Sfx);
+        master.RegisterValueChangedCallback(evt => AudioPreferences.SetMaster(evt.newValue));
+        music.RegisterValueChangedCallback(evt => AudioPreferences.SetMusic(evt.newValue));
+        sfx.RegisterValueChangedCallback(evt => AudioPreferences.SetSfx(evt.newValue));
 
-        BuildHeader(screen);
-        BuildBrandAndButtons(screen);
-        BuildFooter(screen);
-        BuildHowToPage(screen);
-        BuildOptionsPage(screen);
+        Toggle fullscreen = root.Q<Toggle>("fullscreen-toggle");
+        fullscreen.SetValueWithoutNotify(Screen.fullScreen);
+        fullscreen.RegisterValueChangedCallback(evt =>
+        {
+            Screen.fullScreen = evt.newValue;
+            PlayerPrefs.SetInt("display.fullscreen", evt.newValue ? 1 : 0);
+            PlayerPrefs.Save();
+        });
+        resolutions.Clear();
+        resolutions.AddRange(Screen.resolutions);
+        List<string> choices = resolutions.Select(r => $"{r.width} × {r.height}").Distinct().ToList();
+        if (choices.Count == 0) choices.Add($"{Screen.width} × {Screen.height}");
+        DropdownField resolution = root.Q<DropdownField>("resolution-dropdown");
+        resolution.choices = choices;
+        resolution.index = FindCurrentResolutionIndex(choices);
+        resolution.RegisterValueChangedCallback(evt => ApplyResolution(evt.newValue));
+
         ShowPage(menuPage);
+    }
+
+    private static void AddOptionSlider(VisualElement parent, string title, float value, System.Action<float> changed)
+    {
+        Slider slider = new Slider(title, 0f, 1f) { value = value };
+        slider.AddToClassList("option-slider");
+        slider.RegisterValueChangedCallback(evt => changed(evt.newValue));
+        parent.Add(slider);
     }
 
     private void BuildHeader(VisualElement parent)
@@ -148,7 +177,7 @@ public sealed class ProtocolZeroMainMenuToolkit : MonoBehaviour
         VisualElement buttons = new VisualElement();
         buttons.AddToClassList("menu-buttons");
         content.Add(buttons);
-        AddMenuButton(buttons, "PLAY", "▶", true, () => SceneManager.LoadScene("SampleScene"));
+        AddMenuButton(buttons, "PLAY", "▶", true, () => SceneManager.LoadScene("RafliScene"));
         AddMenuButton(buttons, "HOW TO PLAY", "▤", false, () => ShowPage(howToPage));
         AddMenuButton(buttons, "OPTIONS", "⚙", false, () => ShowPage(optionsPage));
         AddMenuButton(buttons, "QUIT", "⏻", false, QuitGame);
